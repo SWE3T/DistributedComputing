@@ -12,10 +12,14 @@ def receive_m():
         elif("aceito"==data.decode('utf-8')):
             print("\nRequisição ACEITA\nIniciando acesso.\n")
             use_rc()
+        elif("new_process"==data.decode('utf-8').split()[0]):
+            print("\nNovo processo na rede", int(data.decode('utf-8').split()[1]))
+            process_network.update({int(data.decode('utf-8').split()[1])})
         else:   
             print(data.decode('utf-8'))
 
 def send_m():
+    s.sendto("connect".encode('utf-8'), n_address)
     while True:
         s.sendto(input("").encode('utf-8'), n_address)
 
@@ -32,6 +36,7 @@ s.bind((host, 0))
 
 _, port = s.getsockname()
 print('Porta deste processo:', port)
+process_network = {port}
 
 n_address = (('localhost', 4000))
 
