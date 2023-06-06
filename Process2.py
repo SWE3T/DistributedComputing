@@ -1,7 +1,6 @@
-import threading
 import socket
+import threading
 import time
-import sys
 
 global relative_time
 relative_time = 1
@@ -21,10 +20,8 @@ def receive_m():
         elif("new_process"==data.decode('utf-8').split()[0]):
             print("\nNovo processo na rede", int(data.decode('utf-8').split()[1]))
             process_network.update({int(data.decode('utf-8').split()[1])})
-        else:
-            messages_queue.append(data.decode('utf-8'))
-            
-            print(messages_queue)
+        else:   
+            print(data.decode('utf-8'))
 
 def send_m():
     s.sendto("connect".encode('utf-8'), n_address)
@@ -38,14 +35,6 @@ def use_rc():
     s.sendto(("liberar").encode('utf-8'), n_address)
 
 def send_to_all_processes(message):
-    global relative_time
-    relative_time += 1
-    for process in process_network:
-        print('Enviando mensagem para processo', process)
-        s.sendto((message +'-'+ str(port) +'-'+ str(relative_time))
-            .encode('utf-8'), ('localhost', process))
-
-def _to_all_processes(message):
     global relative_time
     relative_time += 1
     for process in process_network:
@@ -77,4 +66,4 @@ t2.start()
 
 time.sleep(3)
 
-send_to_all_processes(sys.argv[1])
+send_to_all_processes('jur')
